@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-    def move(self, move_left, move_right, move_fwd, move_bwd):
+    def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost):
         dx = 0
         dy = 0
 
@@ -33,6 +33,10 @@ class Player(pygame.sprite.Sprite):
             dy = -self.speed
         if move_bwd:
             dy = self.speed
+        if speed_boost:
+            self.speed = 10
+        else:
+            self.speed = 5
 
 
         self.rect.x += dx

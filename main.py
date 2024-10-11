@@ -19,6 +19,7 @@ move_left = False
 move_right = False
 move_fwd = False
 move_bwd = False
+speed_boost = False
 
 #BG colors
 BG = (0, 0, 0)
@@ -35,7 +36,7 @@ while run:
     draw_bg()
     player.draw()
 
-    player.move(move_left, move_right, move_fwd, move_bwd)
+    player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -49,6 +50,8 @@ while run:
                 move_fwd = True
             if event.key == pygame.K_s:
                 move_bwd = True
+            if event.key == pygame.K_LSHIFT:
+                speed_boost = True
             if event.key == pygame.K_ESCAPE:
                 run = False
 
@@ -61,6 +64,8 @@ while run:
                 move_fwd = False
             if event.key == pygame.K_s:
                 move_bwd = False
+            if event.key == pygame.K_LSHIFT:
+                speed_boost = False
 
 
     pygame.display.update()
