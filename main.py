@@ -1,5 +1,6 @@
 import pygame
 import player
+from random import randint
 
 pygame.init()
 
@@ -23,6 +24,8 @@ speed_boost = False
 
 #BG colors
 BG = (0, 0, 0)
+
+
 
 def draw_bg():
     screen.fill(BG)
