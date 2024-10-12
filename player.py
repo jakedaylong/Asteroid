@@ -1,10 +1,13 @@
 import pygame.sprite
 import pygame
+import projectiles
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, speed):
@@ -38,9 +41,18 @@ class Player(pygame.sprite.Sprite):
         else:
             self.speed = 5
 
-
         self.rect.x += dx
         self.rect.y += dy
 
+    def shoot(self, shoot):
+        if shoot:
+            bullet = projectiles.Laser(self.rect.centerx, self.rect.centery)
+            projectiles.bullet_group.add(bullet)
+
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+
+
+
+
+

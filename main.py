@@ -2,6 +2,8 @@ import pygame
 import player
 from random import randint
 
+import projectiles
+
 pygame.init()
 
 SCREEN_WIDTH = 1200
@@ -11,18 +13,19 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.display.set_caption('Asteroid')
 
-#framerate
+# framerate
 clock = pygame.time.Clock()
 FPS = 60
 
-#define actions
+# define actions
 move_left = False
 move_right = False
 move_fwd = False
 move_bwd = False
 speed_boost = False
+shooting = False
 
-#BG colors
+# BG colors
 BG = (0, 0, 0)
 
 
@@ -38,8 +41,11 @@ while run:
     clock.tick(FPS)
     draw_bg()
     player.draw()
-
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
+    player.shoot(shooting)
+
+    projectiles.bullet_group.update()
+    projectiles.bullet_group.draw(screen)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -55,6 +61,8 @@ while run:
                 move_bwd = True
             if event.key == pygame.K_LSHIFT:
                 speed_boost = True
+            if event.key == pygame.K_SPACE:
+                shooting = True
             if event.key == pygame.K_ESCAPE:
                 run = False
 
@@ -69,7 +77,8 @@ while run:
                 move_bwd = False
             if event.key == pygame.K_LSHIFT:
                 speed_boost = False
-
+            if event.key == pygame.K_SPACE:
+                shooting = False
 
     pygame.display.update()
 
