@@ -4,11 +4,10 @@ import pygame
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
-
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-
 bullet_group = pygame.sprite.Group()
+
 
 class Laser(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -18,7 +17,7 @@ class Laser(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * 0.2), int(self.image.get_height() * 0.2)))
         self.speed = 10
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.center = (x, y - (self.image.get_height() / 2))
         self.direction = 0
 
     def update(self):

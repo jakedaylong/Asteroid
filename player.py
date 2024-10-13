@@ -8,7 +8,6 @@ SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, speed):
         pygame.sprite.Sprite.__init__(self)
@@ -19,6 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(player_img, (int(player_img.get_width() * scale), int(player_img.get_height() * scale)))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+        self.cooldown = 0
 
     def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost):
         dx = 0
@@ -46,8 +46,14 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self, shoot):
         if shoot:
-            bullet = projectiles.Laser(self.rect.centerx, self.rect.centery)
-            projectiles.bullet_group.add(bullet)
+            if self.cooldown == 0:
+                self.cooldown = 10
+                bullet = projectiles.Laser(self.rect.centerx, self.rect.centery)
+                projectiles.bullet_group.add(bullet)
+
+    def update(self):
+        if self.cooldown > 0:
+            self.cooldown -= 1
 
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)

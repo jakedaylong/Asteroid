@@ -29,9 +29,9 @@ shooting = False
 BG = (0, 0, 0)
 
 
-
 def draw_bg():
     screen.fill(BG)
+
 
 player = player.Player(300, 300, 0.3, 5)
 
@@ -43,6 +43,7 @@ while run:
     player.draw()
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
     player.shoot(shooting)
+    player.update()
 
     projectiles.bullet_group.update()
     projectiles.bullet_group.draw(screen)
