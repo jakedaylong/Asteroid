@@ -1,10 +1,6 @@
 '''Projectiles'''
 import pygame
-
-
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+import screen_prop
 
 bullet_group = pygame.sprite.Group()
 
@@ -22,5 +18,5 @@ class Laser(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= self.speed
-        if self.rect.bottom > SCREEN_HEIGHT:
+        if self.rect.bottom > screen_prop.SCREEN_HEIGHT:
             self.kill()

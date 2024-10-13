@@ -1,11 +1,7 @@
 import pygame.sprite
 import pygame
 import projectiles
-
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+import screen_prop
 
 
 class Player(pygame.sprite.Sprite):
@@ -56,7 +52,7 @@ class Player(pygame.sprite.Sprite):
             self.cooldown -= 1
 
     def draw(self):
-        screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
+        screen_prop.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
 
 

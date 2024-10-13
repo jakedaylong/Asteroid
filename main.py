@@ -1,15 +1,13 @@
 import pygame
 import player
+import screen_prop
 from random import randint
 
 import projectiles
 
 pygame.init()
 
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((screen_prop.SCREEN_WIDTH, screen_prop.SCREEN_HEIGHT))
 
 pygame.display.set_caption('Asteroid')
 
