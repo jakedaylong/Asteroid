@@ -40,12 +40,19 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += dx
         self.rect.y += dy
 
-    def shoot(self, shoot):
+    def shoot_laser(self, shoot):
         if shoot:
             if self.cooldown == 0:
                 self.cooldown = 10
                 bullet = projectiles.Laser(self.rect.centerx, self.rect.centery)
                 projectiles.bullet_group.add(bullet)
+
+    def shoot_missile(self, missile):
+        if missile:
+            if self.cooldown == 0:
+                self.cooldown = 20
+                missle = projectiles.Missile(self.rect.centerx, self.rect.centery)
+                projectiles.bullet_group.add(missle)
 
     def update(self):
         if self.cooldown > 0:
