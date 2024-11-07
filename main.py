@@ -22,7 +22,7 @@ move_right = False
 move_fwd = False
 move_bwd = False
 speed_boost = False
-shooting = False
+laser = False
 missile = False
 
 # BG colors
@@ -48,7 +48,7 @@ while run:
     draw_bg()
     player.draw()
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
-    player.shoot_laser(shooting)
+    player.shoot_laser(laser)
     player.shoot_missile(missile)
     player.update()
 
@@ -73,7 +73,7 @@ while run:
             if event.key == pygame.K_LSHIFT:
                 speed_boost = True
             if event.key == pygame.K_SPACE:
-                shooting = True
+                laser = True
             if event.key == pygame.K_f:
                 missile = True
             if event.key == pygame.K_ESCAPE:
@@ -93,7 +93,7 @@ while run:
             if event.key == pygame.K_f:
                 missile = False
             if event.key == pygame.K_SPACE:
-                shooting = False
+                laser = False
 
     pygame.display.update()
 
