@@ -1,12 +1,9 @@
-'''Projectiles'''
+#Projectiles
 import pygame
 import screen_prop
 from enemies import enemy_group
-from screen_prop import screen
 
 bullet_group = pygame.sprite.Group()
-
-
 
 class Laser(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -49,7 +46,7 @@ class Missile(pygame.sprite.Sprite):
 
     def update(self):
         while self.speed < 7:
-            self.speed += 1
+            self.speed += 0.07
         self.rect.y -= self.speed
         if self.rect.bottom < screen_prop.SCREEN_HEIGHT - screen_prop.SCREEN_HEIGHT + 10:
             self.kill()
