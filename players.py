@@ -3,6 +3,7 @@ import pygame
 import projectiles
 import screen_prop
 
+player_group = pygame.sprite.Group()
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, speed):
@@ -51,8 +52,8 @@ class Player(pygame.sprite.Sprite):
         if missile:
             if self.cooldown == 0:
                 self.cooldown = 20
-                missle = projectiles.Missile(self.rect.centerx, self.rect.centery)
-                projectiles.bullet_group.add(missle)
+                missile = projectiles.Missile(self.rect.centerx, self.rect.centery)
+                projectiles.bullet_group.add(missile)
 
     def update(self):
         if self.cooldown > 0:

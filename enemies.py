@@ -2,6 +2,8 @@ import pygame
 import projectiles
 import screen_prop
 
+enemy_group = pygame.sprite.Group()
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, speed):
         pygame.sprite.Sprite.__init__(self)

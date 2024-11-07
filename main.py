@@ -1,5 +1,5 @@
 import pygame
-import player
+import players
 import screen_prop
 import enemies
 from random import randint
@@ -33,8 +33,13 @@ def draw_bg():
     screen.fill(BG)
 
 
-player = player.Player(300, 300, 0.3, 5)
+player = players.Player(300, 200, 0.3, 5)
+players.player_group.add(player)
+
 enemy = enemies.Enemy(1000, 500, 0.3, 3)
+enemies.enemy_group.add(enemy)
+
+
 
 run = True
 while run:
