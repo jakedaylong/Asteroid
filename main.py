@@ -36,9 +36,7 @@ def draw_bg():
 player = players.Player(300, 200, 0.3, 5)
 players.player_group.add(player)
 
-enemy = enemies.Enemy(1000, 500, 0.3, 3)
-enemies.enemy_group.add(enemy)
-
+enemies.spawn_enemy(1)
 
 
 run = True
@@ -52,8 +50,8 @@ while run:
     player.shoot_missile(missile)
     player.update()
 
-    enemy.draw()
-    enemy.update()
+    enemies.enemy_group.draw(screen)
+    enemies.enemy_group.update()
 
     projectiles.bullet_group.update()
     projectiles.bullet_group.draw(screen)

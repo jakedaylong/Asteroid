@@ -29,6 +29,7 @@ class Laser(pygame.sprite.Sprite):
             if target.rect.top < self.rect.centery < target.rect.bottom and target.rect.left < self.rect.centerx < target.rect.right:
                 screen_prop.screen.blit(self.laser_hit, (self.rect.centerx - self.laser_hit_rect.centerx, self.rect.centery - self.laser_hit_rect.centery))
                 self.laser_hit_sound.play()
+                target.health -= 10
                 self.kill()
 
 class Missile(pygame.sprite.Sprite):
