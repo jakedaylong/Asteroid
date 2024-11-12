@@ -2,6 +2,7 @@ import pygame
 import projectiles
 import screen_prop
 from screen_prop import screen
+import time
 
 enemy_group = pygame.sprite.Group()
 
@@ -21,6 +22,7 @@ class Enemy(pygame.sprite.Sprite):
         player_img = pygame.image.load('assets/player/player_ship.png')
         self.image = pygame.transform.scale(player_img, (int(player_img.get_width() * scale), int(player_img.get_height() * scale)))
         self.image = pygame.transform.rotate(self.image, 180)
+        self.death_explosion = pygame.mixer.Sound('assets/player/large-underwater-explosion-short.wav')
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.cooldown = 0
@@ -63,6 +65,7 @@ class Enemy(pygame.sprite.Sprite):
             self.cooldown -= 1
         if self.health <= 0:
             self.enemy_death()
+            self.death_explosion.play()
             self.kill()
 
     def enemy_death(self):
@@ -75,6 +78,7 @@ class Enemy(pygame.sprite.Sprite):
 
         cell_list = []
         cell_pos = 0
+        frame_count = 0
 
         for y in range(0, image_size[1], cell_height):
             for x in range(0, image_size[0], cell_width):
@@ -85,10 +89,13 @@ class Enemy(pygame.sprite.Sprite):
 
         while cell_pos < len(cell_list) - 1:
             screen.blit(cell_list[cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
-            cell_pos += 1
-            pygame.display.update()
-            clock = pygame.time.Clock()
-            clock.tick(12)
+            pygame.display.flip()
+            frame_count += 1
+            if frame_count % 50 == 0:
+                cell_pos += 1
+            else:
+                cell_pos = cell_pos
+
 
 
     def draw(self):
