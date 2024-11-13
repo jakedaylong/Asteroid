@@ -2,15 +2,15 @@ import pygame
 import players
 import screen_prop
 import enemies
-from random import randint
-
-import projectiles
+import pygame_gui
 
 pygame.init()
 
 screen = pygame.display.set_mode((screen_prop.SCREEN_WIDTH, screen_prop.SCREEN_HEIGHT))
 
 pygame.display.set_caption('Asteroid')
+
+ui_manager = pygame_gui.UIManager((screen_prop.SCREEN_WIDTH, screen_prop.SCREEN_HEIGHT))
 
 # framerate
 clock = pygame.time.Clock()
@@ -28,21 +28,18 @@ missile = False
 # BG colors
 BG = (0, 0, 0)
 
-
 def draw_bg():
     screen.fill(BG)
 
-
-player = players.Player(300, 200, 0.3, 5)
+player = players.Player(300, 200, 0.3, 5, "player 1")
 players.player_group.add(player)
 
 enemies.spawn_enemy(1)
 
-
 run = True
 while run:
 
-    clock.tick(FPS)
+    time_delta = clock.tick(FPS)/1000.0
     draw_bg()
     player.draw()
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
@@ -50,11 +47,14 @@ while run:
     player.shoot_missile(missile)
     player.update()
 
+    score_box = pygame_gui.elements.UITextBox(f"<font size=25>{player.player_score}</font>",
+                                              relative_rect=pygame.Rect((150, 800), (100, 50)))
+
     enemies.enemy_group.draw(screen)
     enemies.enemy_group.update()
 
-    projectiles.bullet_group.update()
-    projectiles.bullet_group.draw(screen)
+    players.player_bullet_group.update()
+    players.player_bullet_group.draw(screen)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -93,6 +93,11 @@ while run:
             if event.key == pygame.K_SPACE:
                 laser = False
 
+    ui_manager.update(time_delta)
+    ui_manager.draw_ui(screen)
+
     pygame.display.update()
+
+    print(player.player_score)
 
 pygame.quit()

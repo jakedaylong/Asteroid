@@ -12,7 +12,6 @@ def spawn_enemy(enemy_count):
         enemy_group.add(enemy)
         enemy_count -= 1
 
-
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, speed, health):
         pygame.sprite.Sprite.__init__(self)
@@ -23,10 +22,13 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(player_img, (int(player_img.get_width() * scale), int(player_img.get_height() * scale)))
         self.image = pygame.transform.rotate(self.image, 180)
         self.death_explosion = pygame.mixer.Sound('assets/player/large-underwater-explosion-short.wav')
+        self.death_img = pygame.image.load('assets/player/exp2_0.png')
+        self.death_img_size = self.death_img.get_size()
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.cooldown = 0
         self.health = health
+        self.hit_count = 0
 
 
     def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost):
@@ -65,27 +67,27 @@ class Enemy(pygame.sprite.Sprite):
             self.cooldown -= 1
         if self.health <= 0:
             self.enemy_death()
-            self.death_explosion.play()
             self.kill()
+            self.remove()
 
     def enemy_death(self):
-        death_img = pygame.image.load('assets/player/exp2_0.png')
-        image_size = death_img.get_size()
         x_cell = 4
         y_cell = 4
-        cell_width = int(image_size[0] / x_cell)
-        cell_height = int(image_size[1] / y_cell)
+        cell_width = int(self.death_img_size[0] / x_cell)
+        cell_height = int(self.death_img_size[1] / y_cell)
 
         cell_list = []
         cell_pos = 0
         frame_count = 0
 
-        for y in range(0, image_size[1], cell_height):
-            for x in range(0, image_size[0], cell_width):
+        for y in range(0, self.death_img_size[1], cell_height):
+            for x in range(0, self.death_img_size[0], cell_width):
                 surface = pygame.Surface((cell_width, cell_height))
-                surface.blit(death_img, (0, 0),
+                surface.blit(self.death_img, (0, 0),
                              (x, y, cell_width, cell_height))
                 cell_list.append(surface)
+
+        self.death_explosion.play()
 
         while cell_pos < len(cell_list) - 1:
             screen.blit(cell_list[cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
@@ -95,8 +97,6 @@ class Enemy(pygame.sprite.Sprite):
                 cell_pos += 1
             else:
                 cell_pos = cell_pos
-
-
 
     def draw(self):
         screen_prop.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
