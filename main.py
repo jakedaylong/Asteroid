@@ -25,6 +25,8 @@ speed_boost = False
 laser = False
 missile = False
 
+frame_count = 0
+
 # BG colors
 BG = (0, 0, 0)
 
@@ -39,7 +41,7 @@ enemies.spawn_enemy(1)
 run = True
 while run:
 
-    time_delta = clock.tick(FPS)/1000.0
+    time_delta = clock.tick(FPS)
     draw_bg()
     ui_manager.update(time_delta)
     ui_manager.draw_ui(screen)
@@ -50,7 +52,9 @@ while run:
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
     player.update()
 
-    score_box = pygame_gui.elements.UITextBox(f"<font size=25>{player.player_score}</font>",
+    frame_count += 1
+
+    score_box = pygame_gui.elements.UITextBox(f"<font size=25>{frame_count}</font>",
                                               relative_rect=pygame.Rect((150, 800), (100, 50)))
 
     players.player_bullet_group.update()
@@ -97,7 +101,5 @@ while run:
                 laser = False
 
     pygame.display.update()
-
-    print(player.player_score)
 
 pygame.quit()

@@ -92,9 +92,11 @@ class Enemy(pygame.sprite.Sprite):
 
         while cell_pos < len(cell_list) - 1:
             screen.blit(cell_list[cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
-            pygame.display.flip()
+            explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
+            pygame.display.update(explosion_rect)
             frame_count += 1
-            if frame_count % 50 == 0:
+            print(frame_count)
+            if frame_count % 1000 == 0:
                 cell_pos += 1
             else:
                 cell_pos = cell_pos
