@@ -6,3 +6,7 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+__pycache__/enemies.cpython-310.pyc
+__pycache__/player.cpython-310.pyc
+__pycache__/projectiles.cpython-310.pyc
+__pycache__/screen_prop.cpython-310.pyc

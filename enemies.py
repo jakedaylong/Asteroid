@@ -87,6 +87,7 @@ class Enemy(pygame.sprite.Sprite):
                              (x, y, cell_width, cell_height))
                 cell_list.append(surface)
 
+        self.death_explosion.set_volume(0.4)
         self.death_explosion.play()
 
         while cell_pos < len(cell_list) - 1:

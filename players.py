@@ -76,10 +76,12 @@ class Laser(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,
                                             (int(self.image.get_width() * 0.2), int(self.image.get_height() * 0.2)))
         laser_sound = pygame.mixer.Sound('assets/projectiles/tir.mp3')
+        laser_sound.set_volume(0.3)
         laser_sound.play()
         self.laser_hit = pygame.image.load('assets/projectiles/laser_hit.png').convert_alpha()
         self.laser_hit_rect = self.laser_hit.get_rect()
         self.laser_hit_sound = pygame.mixer.Sound('assets/projectiles/explosion.wav')
+        self.laser_hit_sound.set_volume(0.2)
         self.speed = 10
         self.rect = self.image.get_rect()
         self.rect.center = (x, y - (self.image.get_height() / 2))
