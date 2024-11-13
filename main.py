@@ -41,20 +41,23 @@ while run:
 
     time_delta = clock.tick(FPS)/1000.0
     draw_bg()
-    player.draw()
-    player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
+    ui_manager.update(time_delta)
+    ui_manager.draw_ui(screen)
     player.shoot_laser(laser)
     player.shoot_missile(missile)
+    player.draw()
+
+    player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
     player.update()
 
     score_box = pygame_gui.elements.UITextBox(f"<font size=25>{player.player_score}</font>",
                                               relative_rect=pygame.Rect((150, 800), (100, 50)))
 
-    enemies.enemy_group.draw(screen)
-    enemies.enemy_group.update()
-
     players.player_bullet_group.update()
     players.player_bullet_group.draw(screen)
+
+    enemies.enemy_group.draw(screen)
+    enemies.enemy_group.update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -92,9 +95,6 @@ while run:
                 missile = False
             if event.key == pygame.K_SPACE:
                 laser = False
-
-    ui_manager.update(time_delta)
-    ui_manager.draw_ui(screen)
 
     pygame.display.update()
 
