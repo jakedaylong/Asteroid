@@ -25,8 +25,6 @@ speed_boost = False
 laser = False
 missile = False
 
-frame_count = 0
-
 # BG colors
 BG = (0, 0, 0)
 
@@ -48,7 +46,6 @@ while run:
     player.shoot_laser(laser)
     player.shoot_missile(missile)
     player.draw()
-
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
     player.update()
 
