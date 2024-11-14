@@ -2,7 +2,6 @@ import pygame
 import projectiles
 import screen_prop
 from screen_prop import screen
-import time
 
 enemy_group = pygame.sprite.Group()
 
@@ -29,6 +28,9 @@ class Enemy(pygame.sprite.Sprite):
         self.cooldown = 0
         self.health = health
         self.hit_count = 0
+        self.animation_time = 0.01
+        self.current_time = 0
+        self.cell_pos = 0
 
 
     def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost):
@@ -62,23 +64,27 @@ class Enemy(pygame.sprite.Sprite):
                 bullet = projectiles.Laser(self.rect.centerx, self.rect.centery)
                 projectiles.bullet_group.add(bullet)
 
-    def update(self):
+    def update(self, time_delta):
         if self.cooldown > 0:
             self.cooldown -= 1
         if self.health <= 0:
-            self.enemy_death()
+            self.enemy_death(time_delta)
+        if self.cell_pos >= 15:
             self.kill()
             self.remove()
 
-    def enemy_death(self):
+
+    def enemy_death(self, time_delta):
         x_cell = 4
         y_cell = 4
         cell_width = int(self.death_img_size[0] / x_cell)
         cell_height = int(self.death_img_size[1] / y_cell)
 
         cell_list = []
-        cell_pos = 0
-        frame_count = 0
+
+        if self.cell_pos == 0:
+            self.death_explosion.set_volume(0.4)
+            self.death_explosion.play()
 
         for y in range(0, self.death_img_size[1], cell_height):
             for x in range(0, self.death_img_size[0], cell_width):
@@ -87,19 +93,15 @@ class Enemy(pygame.sprite.Sprite):
                              (x, y, cell_width, cell_height))
                 cell_list.append(surface)
 
-        self.death_explosion.set_volume(0.4)
-        self.death_explosion.play()
+        self.current_time += time_delta
 
-        while cell_pos < len(cell_list) - 1:
-            screen.blit(cell_list[cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.cell_pos = (self.cell_pos + 1) % len(cell_list)
+            screen.blit(cell_list[self.cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
             explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
             pygame.display.update(explosion_rect)
-            frame_count += 1
-            print(frame_count)
-            if frame_count % 1000 == 0:
-                cell_pos += 1
-            else:
-                cell_pos = cell_pos
+
 
     def draw(self):
         screen_prop.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)

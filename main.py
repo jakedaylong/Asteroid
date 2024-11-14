@@ -41,7 +41,7 @@ enemies.spawn_enemy(1)
 run = True
 while run:
 
-    time_delta = clock.tick(FPS)
+    time_delta = clock.tick(FPS)/1000
     draw_bg()
     ui_manager.update(time_delta)
     ui_manager.draw_ui(screen)
@@ -52,16 +52,14 @@ while run:
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
     player.update()
 
-    frame_count += 1
-
-    score_box = pygame_gui.elements.UITextBox(f"<font size=25>{frame_count}</font>",
+    score_box = pygame_gui.elements.UITextBox(f"<font size=25>{player.player_score}</font>",
                                               relative_rect=pygame.Rect((150, 800), (100, 50)))
 
     players.player_bullet_group.update()
     players.player_bullet_group.draw(screen)
 
     enemies.enemy_group.draw(screen)
-    enemies.enemy_group.update()
+    enemies.enemy_group.update(time_delta)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
