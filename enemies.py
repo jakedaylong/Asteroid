@@ -22,7 +22,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(player_img, (int(player_img.get_width() * scale), int(player_img.get_height() * scale)))
         self.image = pygame.transform.rotate(self.image, 180)
         self.death_explosion = pygame.mixer.Sound('assets/player/large-underwater-explosion-short.wav')
-        self.death_img = pygame.image.load('assets/player/exp2_0.png')
+        self.death_img = pygame.image.load('assets/player/exp2_0.png').convert_alpha()
         self.death_img_size = self.death_img.get_size()
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -90,16 +90,25 @@ class Enemy(pygame.sprite.Sprite):
         self.death_explosion.set_volume(0.4)
         self.death_explosion.play()
 
-        while cell_pos < len(cell_list) - 1:
-            screen.blit(cell_list[cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
-            explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
-            pygame.display.update(explosion_rect)
-            frame_count += 1
-            print(frame_count)
-            if frame_count % 1000 == 0:
-                cell_pos += 1
-            else:
-                cell_pos = cell_pos
+        current_frame = 0
+        frame_count = len(cell_list)
+        animation_speed = 0.1
+        last_update = 0
+        # Inside main loop
+        current_time = pygame.time.get_ticks()
+        for frame in range(0, frame_count):
+
+                screen.blit(cell_list[frame], (self.rect.centerx - 32, self.rect.centery - 32))
+                explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
+                pygame.display.update(explosion_rect)
+                print(frame)
+
+        # for _ in cell_list:
+        #     screen.blit(cell_list[cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
+        #     explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
+        #     pygame.display.update(explosion_rect)
+        #     print(cell_pos)
+        #     cell_pos += 1
 
     def draw(self):
         screen_prop.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
