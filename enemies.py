@@ -70,7 +70,6 @@ class Enemy(pygame.sprite.Sprite):
         if self.health <= 0:
             self.enemy_death(time_delta)
         if self.cell_pos >= 15:
-            self.kill()
             self.remove()
 
 
@@ -88,12 +87,14 @@ class Enemy(pygame.sprite.Sprite):
 
         for y in range(0, self.death_img_size[1], cell_height):
             for x in range(0, self.death_img_size[0], cell_width):
-                surface = pygame.Surface((cell_width, cell_height))
+                surface = pygame.Surface((cell_width, cell_height), pygame.SRCALPHA)
                 surface.blit(self.death_img, (0, 0),
                              (x, y, cell_width, cell_height))
                 cell_list.append(surface)
 
         self.current_time += time_delta
+
+        self.kill()
 
         if self.current_time >= self.animation_time:
             self.current_time = 0
