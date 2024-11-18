@@ -87,6 +87,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.health <= 0:
             self.enemy_death(time_delta)
         if self.cell_pos >= 15:
+            self.kill()
             self.remove()
 
 
@@ -111,15 +112,13 @@ class Enemy(pygame.sprite.Sprite):
 
         self.current_time += time_delta
 
-        self.kill()
-
         if self.current_time >= self.animation_time:
             self.current_time = 0
-            self.cell_pos = (self.cell_pos + 1) % len(cell_list)
             screen.blit(cell_list[self.cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
+            self.cell_pos = (self.cell_pos + 1) % len(cell_list)
             explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
             pygame.display.update(explosion_rect)
-
+            print(self.cell_pos)
 
     def draw(self):
         screen_prop.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
