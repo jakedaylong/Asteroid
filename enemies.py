@@ -2,12 +2,14 @@ import pygame
 import projectiles
 import screen_prop
 from screen_prop import screen
+import players
+from random import randint
 
 enemy_group = pygame.sprite.Group()
 
 def spawn_enemy(enemy_count):
     while enemy_count > 0:
-        enemy = Enemy(1000, 500, 0.3, 3, 100)
+        enemy = Enemy(1000, 500, 0.3, 2, 100)
         enemy_group.add(enemy)
         enemy_count -= 1
 
@@ -15,6 +17,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, speed, health):
         pygame.sprite.Sprite.__init__(self)
         self.speed = speed
+        self.speed_fwd = 1
         self.direction = 0
         self.flip = False
         player_img = pygame.image.load('assets/player/player_ship.png')
@@ -26,33 +29,46 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.cooldown = 0
+        self.move_cooldown = 0
         self.health = health
         self.hit_count = 0
         self.animation_time = 0.01
         self.current_time = 0
         self.cell_pos = 0
+        self.enemy_move_time = 3
 
 
-    def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost):
+    def enemy_move(self):
         dx = 0
         dy = 0
 
-        if move_left:
+        enemy_move_left = False
+        enemy_move_right = False
+        enemy_move_fwd = False
+        enemy_move_bwd = False
+
+        for player in players.player_group:
+            if player.rect.centerx > self.rect.centerx:
+                enemy_move_right = True
+            if player.rect.centerx < self.rect.centerx:
+                enemy_move_left = True
+            if player.rect.centery > self.rect.centery:
+                enemy_move_fwd = True
+            if player.rect.centery < self.rect.centery:
+                enemy_move_bwd = True
+
+        if enemy_move_left:
             dx = -self.speed
             self.flip = True
             self.direction = -1
-        if move_right:
+        if enemy_move_right:
             dx = self.speed
             self.flip = False
             self.direction = 1
-        if move_fwd:
-            dy = -self.speed
-        if move_bwd:
+        if enemy_move_fwd:
             dy = self.speed
-        if speed_boost:
-            self.speed = 10
-        else:
-            self.speed = 5
+        if enemy_move_bwd:
+            dy = -self.speed
 
         self.rect.x += dx
         self.rect.y += dy
@@ -65,6 +81,7 @@ class Enemy(pygame.sprite.Sprite):
                 projectiles.bullet_group.add(bullet)
 
     def update(self, time_delta):
+        self.enemy_move()
         if self.cooldown > 0:
             self.cooldown -= 1
         if self.health <= 0:
