@@ -47,15 +47,15 @@ class Enemy(pygame.sprite.Sprite):
         enemy_move_fwd = False
         enemy_move_bwd = False
 
-        for player in players.player_group:
-            if player.rect.centerx > self.rect.centerx:
-                enemy_move_right = True
-            if player.rect.centerx < self.rect.centerx:
-                enemy_move_left = True
-            if player.rect.centery > self.rect.centery:
-                enemy_move_fwd = True
-            if player.rect.centery < self.rect.centery:
-                enemy_move_bwd = True
+        # for player in players.player_group:
+        #     if player.rect.centerx > self.rect.centerx:
+        #         enemy_move_right = True
+        #     if player.rect.centerx < self.rect.centerx:
+        #         enemy_move_left = True
+        #     if player.rect.centery > self.rect.centery:
+        #         enemy_move_fwd = True
+        #     if player.rect.centery < self.rect.centery:
+        #         enemy_move_bwd = True
 
         if enemy_move_left:
             dx = -self.speed
