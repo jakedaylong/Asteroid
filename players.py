@@ -9,8 +9,9 @@ player_bullet_group = pygame.sprite.Group()
 hit_flag = False
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, scale, speed, player):
+    def __init__(self, x, y, scale, speed, player_name):
         pygame.sprite.Sprite.__init__(self)
+        self.player_name = player_name
         self.speed = speed
         self.direction = 0
         self.flip = False

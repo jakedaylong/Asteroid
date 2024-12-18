@@ -31,7 +31,7 @@ BG = (0, 0, 0)
 def draw_bg():
     screen.fill(BG)
 
-player = players.Player(300, 200, 0.3, 5, "player 1")
+player = players.Player(300, 200, 0.3, 5, "Jake")
 players.player_group.add(player)
 
 enemies.spawn_enemy(1)
@@ -49,8 +49,9 @@ while run:
     player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
     player.update()
 
-    score_box = pygame_gui.elements.UITextBox(f"<font size=25>{player.player_score}</font>",
-                                              relative_rect=pygame.Rect((150, 800), (100, 50)))
+    score_box = pygame_gui.elements.UITextBox(f"{player.player_name} Score: "
+                                              f"<font size=25>{player.player_score}</font>",
+                                              relative_rect=pygame.Rect((40, 900), (150, 35)))
 
     players.player_bullet_group.update()
     players.player_bullet_group.draw(screen)
