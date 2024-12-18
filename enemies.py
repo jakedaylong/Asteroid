@@ -6,6 +6,7 @@ import players
 from random import randint
 
 enemy_group = pygame.sprite.Group()
+BLACK = (0,0,0)
 
 def spawn_enemy(enemy_count):
     while enemy_count > 0:
@@ -24,7 +25,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(player_img, (int(player_img.get_width() * scale), int(player_img.get_height() * scale)))
         self.image = pygame.transform.rotate(self.image, 180)
         self.death_explosion = pygame.mixer.Sound('assets/player/large-underwater-explosion-short.wav')
-        self.death_img = pygame.image.load('assets/player/exp2_0.png')
+        self.death_img = pygame.image.load('assets/player/exp2_0_new.png')
         self.death_img_size = self.death_img.get_size()
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -116,8 +117,8 @@ class Enemy(pygame.sprite.Sprite):
             self.current_time = 0
             screen.blit(cell_list[self.cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
             self.cell_pos = (self.cell_pos + 1) % len(cell_list)
-            explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
-            pygame.display.update(explosion_rect)
+            # explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
+            # pygame.display.update(explosion_rect)
             print(self.cell_pos)
 
     def draw(self):

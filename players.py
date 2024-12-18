@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = speed
         self.direction = 0
         self.flip = False
-        player_img = pygame.image.load('assets/player/player_ship.png')
+        player_img = pygame.image.load('assets/player/player_ship.png').convert_alpha()
         self.image = pygame.transform.scale(player_img, (int(player_img.get_width() * scale), int(player_img.get_height() * scale)))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
