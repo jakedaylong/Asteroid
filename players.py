@@ -2,6 +2,7 @@ import pygame.sprite
 import pygame
 import enemies
 import screen_prop
+import math
 
 player_group = pygame.sprite.Group()
 player_bullet_group = pygame.sprite.Group()
@@ -21,10 +22,14 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (x, y)
         self.cooldown = 0
         self.player_score = 0
+        self.current_time = 0
+        self.animation_time = 0.02
 
-    def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost):
+    def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost, time_delta):
         dx = 0
         dy = 0
+
+        self.current_time += time_delta
 
         if move_left:
             dx = -self.speed
@@ -60,7 +65,7 @@ class Player(pygame.sprite.Sprite):
                 missile = Missile(self.rect.centerx, self.rect.centery)
                 player_bullet_group.add(missile)
 
-    def update(self):
+    def update(self, mouse_pos):
         if self.cooldown > 0:
             self.cooldown -= 1
         for target in enemies.enemy_group:
@@ -112,14 +117,12 @@ class Missile(pygame.sprite.Sprite):
         self.laser_hit = pygame.image.load('assets/projectiles/laser_hit.png').convert_alpha()
         self.laser_hit_rect = self.laser_hit.get_rect()
         self.laser_hit_sound = pygame.mixer.Sound('assets/projectiles/explosion.wav')
-        self.speed = 0
+        self.speed = 3
         self.rect = self.image.get_rect()
         self.rect.center = (x, y - (self.image.get_height() / 2))
         self.direction = 0
 
     def update(self):
-        while self.speed < 7:
-            self.speed += 0.07
         self.rect.y -= self.speed
         if self.rect.bottom < screen_prop.SCREEN_HEIGHT - screen_prop.SCREEN_HEIGHT + 10:
             self.kill()
@@ -129,6 +132,8 @@ class Missile(pygame.sprite.Sprite):
                     self.rect.centerx - self.laser_hit_rect.centerx,
                     self.rect.centery - self.laser_hit_rect.centery))
                 self.laser_hit_sound.play()
+                target.health -= 30
+                target.hit_count += 3
                 self.kill()
 
 

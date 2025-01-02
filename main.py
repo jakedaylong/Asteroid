@@ -31,7 +31,7 @@ BG = (0, 0, 0)
 def draw_bg():
     screen.fill(BG)
 
-player = players.Player(300, 200, 0.3, 5, "Jake")
+player = players.Player(300, 200, 0.3, 5, "Player 1")
 players.player_group.add(player)
 
 enemies.spawn_enemy(1)
@@ -41,17 +41,18 @@ while run:
 
     time_delta = clock.tick(FPS)/1000
     draw_bg()
+    mouse_pos = pygame.mouse.get_pos()
     ui_manager.update(time_delta)
     ui_manager.draw_ui(screen)
     player.shoot_laser(laser)
     player.shoot_missile(missile)
     player.draw()
-    player.move(move_left, move_right, move_fwd, move_bwd, speed_boost)
-    player.update()
+    player.move(move_left, move_right, move_fwd, move_bwd, speed_boost, time_delta)
+    player.update(mouse_pos)
 
-    score_box = pygame_gui.elements.UITextBox(f"{player.player_name} Score: "
+    score_box = pygame_gui.elements.UITextBox(f"{player.player_name} | Score: "
                                               f"<font size=25>{player.player_score}</font>",
-                                              relative_rect=pygame.Rect((40, 900), (150, 35)))
+                                              relative_rect=pygame.Rect((40, 900), (165, 35)))
 
     players.player_bullet_group.update()
     players.player_bullet_group.draw(screen)

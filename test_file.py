@@ -1,42 +1,47 @@
-# import sys
-#
-# import pygame
-# from pygame.sprite import Sprite
-#
-#
-# from screen_prop import screen
-#
-# img = pygame.image.load('assets/player/exp2_0.png')
-# imageSize = img.get_size()
-# x_cell = 4
-# y_cell = 4
-# cell_width = int(imageSize[0]/x_cell)
-# cell_height = int(imageSize[1]/y_cell)
-#
-# cell_list = []
-# cell_pos = 0
-#
-# clock=pygame.time.Clock()
-# fps = 12
-#
-# for y in range(0, imageSize[1], cell_height):
-#     for x in range(0, imageSize[0], cell_width):
-#         surface = pygame.Surface((cell_width, cell_height))
-#         surface.blit(img, (0, 0),
-#                      (x, y, cell_width, cell_height))
-#         cell_list.append(surface)
-#
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             pygame.quit()
-#             sys.exit()
-#
-#     if cell_pos < len(cell_list) - 1:
-#         cell_pos += 1
-#     else:
-#         cell_pos = 0
-#     screen.blit(cell_list[cell_pos], (300, 200))
-#     pygame.display.update()
-#     pygame.display.set_caption("Python - Pygame Simple SpriteSheet Animation")
-#     clock.tick(fps)
+import pygame
+
+
+pygame.init()
+display = pygame.display.set_mode((640, 480))
+clock = pygame.time.Clock()
+GRAY = pygame.Color('gray12')
+display_width, display_height = display.get_size()
+x = display_width * 0.45
+y = display_height * 0.8
+x_change = 0
+accel_x = 0
+max_speed = 6
+
+crashed = False
+while not crashed:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+                crashed = True
+        elif event.type == pygame.KEYDOWN:
+            # Set the acceleration value.
+            if event.key == pygame.K_LEFT:
+                accel_x = -.2
+            elif event.key == pygame.K_RIGHT:
+                accel_x = .2
+        elif event.type == pygame.KEYUP:
+            if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
+                accel_x = 0
+
+    x_change += accel_x  # Accelerate.
+    if abs(x_change) >= max_speed:  # If max_speed is exceeded.
+        # Normalize the x_change and multiply it with the max_speed.
+        x_change = x_change/abs(x_change) * max_speed
+
+    # Decelerate if no key is pressed.
+    if accel_x == 0:
+        x_change *= 0.92
+
+    x += x_change  # Move the object.
+
+    display.fill(GRAY)
+    pygame.draw.rect(display, (0, 120, 250), (x, y, 20, 40))
+
+    pygame.display.update()
+    clock.tick(60)
+
+pygame.quit()

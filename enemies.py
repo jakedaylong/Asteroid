@@ -82,7 +82,7 @@ class Enemy(pygame.sprite.Sprite):
                 projectiles.bullet_group.add(bullet)
 
     def update(self, time_delta):
-        self.enemy_move()
+        # self.enemy_move()
         if self.cooldown > 0:
             self.cooldown -= 1
         if self.health <= 0:
