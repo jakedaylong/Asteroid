@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, scale, speed, player_name):
         pygame.sprite.Sprite.__init__(self)
         self.player_name = player_name
-        self.speed = speed
+        self.max_speed = speed
         self.direction = 0
         self.flip = False
         player_img = pygame.image.load('assets/player/player_ship.png').convert_alpha()
@@ -24,32 +24,42 @@ class Player(pygame.sprite.Sprite):
         self.player_score = 0
         self.current_time = 0
         self.animation_time = 0.02
+        self.accel = 0
+        self.decel = .92
+        self.dx = 0
+        self.dy = 0
 
     def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost, time_delta):
-        dx = 0
-        dy = 0
 
-        self.current_time += time_delta
+        #self.current_time += time_delta
 
         if move_left:
-            dx = -self.speed
-            self.flip = True
-            self.direction = -1
+            self.accel = -0.2
         if move_right:
-            dx = self.speed
-            self.flip = False
-            self.direction = 1
-        if move_fwd:
-            dy = -self.speed
-        if move_bwd:
-            dy = self.speed
-        if speed_boost:
-            self.speed = 10
-        else:
-            self.speed = 5
+            self.accel = 0.2
+        # if move_fwd:
+        #     dy = -self.speed
+        # if move_bwd:
+        #     dy = self.speed
+        # if speed_boost:
+        #     self.speed = 10
+        # else:
+        #     self.speed = 5
 
-        self.rect.x += dx
-        self.rect.y += dy
+        self.dx += self.accel
+        if abs(self.dx) >= self.max_speed:
+            self.dx = self.dx / abs(self.dx) * self.max_speed
+
+        if not move_left and not move_right:
+            self.accel = 0
+
+        if self.accel == 0:
+            self.dx *= self.decel
+            if -0.01 <= self.dx <= 0.001:
+                self.dx = 0.0
+
+        self.rect.x += self.dx
+        # self.rect.y += dy
 
     def shoot_laser(self, shoot):
         if shoot:

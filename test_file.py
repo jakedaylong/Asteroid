@@ -1,4 +1,5 @@
 import pygame
+import pygame_gui
 
 
 pygame.init()
@@ -11,9 +12,19 @@ y = display_height * 0.8
 x_change = 0
 accel_x = 0
 max_speed = 6
+ui_manager = pygame_gui.UIManager((display_width, display_height))
+
+
 
 crashed = False
 while not crashed:
+    diag_box = pygame_gui.elements.UITextBox(f"x: "
+                                             f"<font size=25>{round(x, 2)}</font> | y:"
+                                             f"<font size=25>{round(y), 2}</font> | dx:"
+                                             f"<font size=25>{round(x_change, 2)}</font> | dy:"
+                                             f"accel:"
+                                             f"<font size=25>{round(accel_x, 2)}</font>",
+                                             relative_rect=pygame.Rect((40, 150), (400, 35)))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
                 crashed = True

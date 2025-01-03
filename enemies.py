@@ -59,9 +59,9 @@ class Enemy(pygame.sprite.Sprite):
         #         enemy_move_bwd = True
 
         if enemy_move_left:
-            dx = -self.speed
-            self.flip = True
-            self.direction = -1
+            dx += self.accel
+            if abs(dx) >= self.speed:
+                dx = dx/abs(dx) * self.speed
         if enemy_move_right:
             dx = self.speed
             self.flip = False
