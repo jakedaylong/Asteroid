@@ -24,42 +24,54 @@ class Player(pygame.sprite.Sprite):
         self.player_score = 0
         self.current_time = 0
         self.animation_time = 0.02
-        self.accel = 0
-        self.decel = .92
-        self.dx = 0
-        self.dy = 0
+        self.accel = 0.0
+        self.accel_y = 0.0
+        self.decel = .95
+        self.dx = 0.0
+        self.dy = 0.0
+        self.x_float = 0.0
+        self.y_float = 0.0
 
     def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost, time_delta):
 
         #self.current_time += time_delta
 
+
         if move_left:
-            self.accel = -0.2
+            self.accel = -0.5
         if move_right:
-            self.accel = 0.2
-        # if move_fwd:
-        #     dy = -self.speed
-        # if move_bwd:
-        #     dy = self.speed
-        # if speed_boost:
-        #     self.speed = 10
-        # else:
-        #     self.speed = 5
+            self.accel = 0.5
+        if move_fwd:
+            self.accel_y = -0.5
+        if move_bwd:
+            self.accel_y = 0.5
+        if speed_boost:
+            self.speed = 10
+        else:
+            self.speed = 5
 
         self.dx += self.accel
         if abs(self.dx) >= self.max_speed:
             self.dx = self.dx / abs(self.dx) * self.max_speed
 
+        self.dy += self.accel_y
+        if abs(self.dy) >= self.max_speed:
+            self.dy = self.dy / abs(self.dy) * self.max_speed
+
         if not move_left and not move_right:
             self.accel = 0
 
+        if not move_fwd and not move_bwd:
+            self.accel_y = 0
+
         if self.accel == 0:
             self.dx *= self.decel
-            if -0.01 <= self.dx <= 0.001:
-                self.dx = 0.0
 
-        self.rect.x += self.dx
-        # self.rect.y += dy
+        if self.accel_y == 0:
+            self.dy *= self.decel
+
+        self.rect.x += int(self.dx)
+        self.rect.y += int(self.dy)
 
     def shoot_laser(self, shoot):
         if shoot:
@@ -105,7 +117,7 @@ class Laser(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= self.speed
-        if self.rect.bottom < screen_prop.SCREEN_HEIGHT - screen_prop.SCREEN_HEIGHT + 10:
+        if screen_prop.SCREEN_HEIGHT < self.rect.bottom < screen_prop.SCREEN_HEIGHT - screen_prop.SCREEN_HEIGHT + 10:
             self.kill()
         for target in enemies.enemy_group:
             if target.rect.top < self.rect.centery < target.rect.bottom and target.rect.left < self.rect.centerx < target.rect.right:

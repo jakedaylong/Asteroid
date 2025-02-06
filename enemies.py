@@ -40,8 +40,8 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def enemy_move(self):
-        dx = 0
-        dy = 0
+        dx = 0.0
+        dy = 0.0
 
         enemy_move_left = False
         enemy_move_right = False

@@ -31,7 +31,7 @@ BG = (0, 0, 0)
 def draw_bg():
     screen.fill(BG)
 
-player = players.Player(500, 200, 0.3, 5, "Player 1")
+player = players.Player(500, 200, 0.3, 7, "Player 1")
 players.player_group.add(player)
 
 enemies.spawn_enemy(1)
