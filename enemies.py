@@ -21,11 +21,11 @@ class Enemy(pygame.sprite.Sprite):
         self.speed_fwd = 1
         self.direction = 0
         self.flip = False
-        player_img = pygame.image.load('assets/player/player_ship.png')
+        player_img = pygame.image.load('assets/player/player_ship.png').convert_alpha()
         self.image = pygame.transform.scale(player_img, (int(player_img.get_width() * scale), int(player_img.get_height() * scale)))
         self.image = pygame.transform.rotate(self.image, 180)
         self.death_explosion = pygame.mixer.Sound('assets/player/large-underwater-explosion-short.wav')
-        self.death_img = pygame.image.load('assets/player/exp2_0_new.png')
+        self.death_img = pygame.image.load('assets/player/exp2_0_new.png').convert_alpha()
         self.death_img_size = self.death_img.get_size()
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -81,18 +81,18 @@ class Enemy(pygame.sprite.Sprite):
                 bullet = projectiles.Laser(self.rect.centerx, self.rect.centery)
                 projectiles.bullet_group.add(bullet)
 
-    def update(self, time_delta):
+    def update(self):
         # self.enemy_move()
         if self.cooldown > 0:
             self.cooldown -= 1
         if self.health <= 0:
-            self.enemy_death(time_delta)
+            self.enemy_death()
         if self.cell_pos >= 15:
             self.kill()
             self.remove()
 
 
-    def enemy_death(self, time_delta):
+    def enemy_death(self):
         x_cell = 4
         y_cell = 4
         cell_width = int(self.death_img_size[0] / x_cell)
@@ -111,15 +111,12 @@ class Enemy(pygame.sprite.Sprite):
                              (x, y, cell_width, cell_height))
                 cell_list.append(surface)
 
-        self.current_time += time_delta
-
-        if self.current_time >= self.animation_time:
-            self.current_time = 0
-            screen.blit(cell_list[self.cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
-            self.cell_pos = (self.cell_pos + 1) % len(cell_list)
-            # explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
-            # pygame.display.update(explosion_rect)
-            print(self.cell_pos)
+        self.current_time = 0
+        screen.blit(cell_list[self.cell_pos], (self.rect.centerx - 32, self.rect.centery - 32))
+        self.cell_pos = (self.cell_pos + 1) % len(cell_list)
+        # explosion_rect = pygame.Rect(self.rect.centerx - 32, self.rect.centery - 32, cell_width, cell_height)
+        # pygame.display.update(explosion_rect)
+        print(self.cell_pos)
 
     def draw(self):
         screen_prop.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)

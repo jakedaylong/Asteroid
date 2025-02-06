@@ -39,33 +39,13 @@ enemies.spawn_enemy(1)
 run = True
 while run:
 
-    time_delta = clock.tick(FPS)/1000
-    draw_bg()
-    mouse_pos = pygame.mouse.get_pos()
-    ui_manager.update(time_delta)
-    ui_manager.draw_ui(screen)
-    player.shoot_laser(laser)
-    player.shoot_missile(missile)
-    player.draw()
-    player.move(move_left, move_right, move_fwd, move_bwd, speed_boost, time_delta)
-    player.update(mouse_pos)
-
     # score_box = pygame_gui.elements.UITextBox(f"{player.player_name} | Speed: "
     #                                           f"<font size=25>{player.player_score}</font>",
     #                                           relative_rect=pygame.Rect((40, 900), (200, 35)))
 
-    diag_box = pygame_gui.elements.UITextBox(f"{player.player_name} | x: "
-                                             f"<font size=25>{round(player.rect.centerx,2)}</font> | y:" 
-                                             f"<font size=25>{round(player.rect.centery),2}</font> | dx:"
-                                             f"<font size=25>{round(player.dx,2)}</font> | dy:"
-                                             f"<font size=25>{round(player.dy,2)}</font> | accel:"
-                                             f"<font size=25>{round(player.accel,2)}</font>",
-                                             relative_rect=pygame.Rect((40, 900), (500, 35)))
-    players.player_bullet_group.update()
-    players.player_bullet_group.draw(screen)
-
-    enemies.enemy_group.draw(screen)
-    enemies.enemy_group.update(time_delta)
+    score_box = pygame_gui.elements.UITextBox(f"{player.player_name} | "
+                                    "Speed: "f"<font size=25>{len(players.player_bullet_group)}</font>",
+                                               relative_rect=pygame.Rect((40, 900), (200, 35)))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -103,6 +83,22 @@ while run:
                 missile = False
             if event.key == pygame.K_SPACE:
                 laser = False
+
+    time_delta = clock.tick(FPS)
+    draw_bg()
+    ui_manager.update(time_delta)
+    ui_manager.draw_ui(screen)
+    player.shoot_laser(laser)
+    player.shoot_missile(missile)
+    player.draw()
+    player.move(move_left, move_right, move_fwd, move_bwd, speed_boost, time_delta)
+    player.update()
+
+    players.player_bullet_group.update()
+    players.player_bullet_group.draw(screen)
+
+    enemies.enemy_group.update()
+    enemies.enemy_group.draw(screen)
 
     pygame.display.update()
 

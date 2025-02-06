@@ -2,14 +2,18 @@ import pygame.sprite
 import pygame
 import enemies
 import screen_prop
-import math
 
+#Group to house players
 player_group = pygame.sprite.Group()
+#Group to house player projectiles
 player_bullet_group = pygame.sprite.Group()
 
-hit_flag = False
 
 class Player(pygame.sprite.Sprite):
+    """
+    Player class that represents a player in the game
+    Sets default values for players
+    """
     def __init__(self, x, y, scale, speed, player_name):
         pygame.sprite.Sprite.__init__(self)
         self.player_name = player_name
@@ -33,10 +37,15 @@ class Player(pygame.sprite.Sprite):
         self.y_float = 0.0
 
     def move(self, move_left, move_right, move_fwd, move_bwd, speed_boost, time_delta):
-
-        #self.current_time += time_delta
-
-
+        """
+        Moves the player
+        :param move_left: -0.5
+        :param move_right: 0.5
+        :param move_fwd: -0.5
+        :param move_bwd: 0.5
+        :param speed_boost: 10
+        :param time_delta: unused
+        """
         if move_left:
             self.accel = -0.5
         if move_right:
@@ -51,10 +60,12 @@ class Player(pygame.sprite.Sprite):
             self.speed = 5
 
         self.dx += self.accel
+
         if abs(self.dx) >= self.max_speed:
             self.dx = self.dx / abs(self.dx) * self.max_speed
 
         self.dy += self.accel_y
+
         if abs(self.dy) >= self.max_speed:
             self.dy = self.dy / abs(self.dy) * self.max_speed
 
@@ -70,10 +81,16 @@ class Player(pygame.sprite.Sprite):
         if self.accel_y == 0:
             self.dy *= self.decel
 
+        #Truncates the floats for self.dx and self.dy into ints prior to assignment to the player's rect.x and rect.x
+        # position. This prevents floating and short stopping depending on the direction of travel.
         self.rect.x += int(self.dx)
         self.rect.y += int(self.dy)
 
     def shoot_laser(self, shoot):
+        """
+        shoots the laser
+        :param shoot:
+        """
         if shoot:
             if self.cooldown == 0:
                 self.cooldown = 10
@@ -81,23 +98,41 @@ class Player(pygame.sprite.Sprite):
                 player_bullet_group.add(bullet)
 
     def shoot_missile(self, missile):
+        """
+        shoots the missile
+        :param missile:
+        """
         if missile:
             if self.cooldown == 0:
                 self.cooldown = 20
                 missile = Missile(self.rect.centerx, self.rect.centery)
                 player_bullet_group.add(missile)
 
-    def update(self, mouse_pos):
+    def update(self):
+        """
+        Updates the player's movement and score on enemy hit
+        """
         if self.cooldown > 0:
             self.cooldown -= 1
         for target in enemies.enemy_group:
             self.player_score = 10 * target.hit_count
 
     def draw(self):
+        """
+        Draws the player on screen
+        """
         screen_prop.screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
 class Laser(pygame.sprite.Sprite):
+    """
+    Laser class that represents a laser in the game
+    """
     def __init__(self, x, y):
+        """
+        Laser class that represents a laser in the game
+        :param x:
+        :param y:
+        """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('assets/projectiles/laser_14.png').convert_alpha()
         self.image = pygame.transform.rotate(self.image, 90)
@@ -116,8 +151,13 @@ class Laser(pygame.sprite.Sprite):
         self.direction = 0
 
     def update(self):
+        """
+        Updates the laser position
+        Checks the laser position and checks it against the screen boundaries. Laser outside boundaries is killed.
+        Checks the laser position and checks it against enemy rect, if inside enemy rect, decrements enemy health, kills the laser
+        """
         self.rect.y -= self.speed
-        if screen_prop.SCREEN_HEIGHT < self.rect.bottom < screen_prop.SCREEN_HEIGHT - screen_prop.SCREEN_HEIGHT + 10:
+        if self.rect.top < screen_prop.SCREEN_HEIGHT - screen_prop.SCREEN_HEIGHT + 10:
             self.kill()
         for target in enemies.enemy_group:
             if target.rect.top < self.rect.centery < target.rect.bottom and target.rect.left < self.rect.centerx < target.rect.right:
@@ -129,7 +169,15 @@ class Laser(pygame.sprite.Sprite):
                 self.kill()
 
 class Missile(pygame.sprite.Sprite):
+    """
+    Missile class that represents a missile in the game
+    """
     def __init__(self, x, y):
+        """
+        Missile class that represents a missile in the game
+        :param x:
+        :param y:
+        """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('assets/projectiles/missile00.png').convert_alpha()
         self.image = pygame.transform.rotate(self.image, 0)
@@ -145,6 +193,11 @@ class Missile(pygame.sprite.Sprite):
         self.direction = 0
 
     def update(self):
+        """
+        Updates the missile position
+        Checks the missile position and checks it against the screen boundaries. Missile outside boundaries is killed.
+        Checks the missile position and checks it against enemy rect, if inside enemy rect, decrements enemy health, kills the missile
+        """
         self.rect.y -= self.speed
         if self.rect.bottom < screen_prop.SCREEN_HEIGHT - screen_prop.SCREEN_HEIGHT + 10:
             self.kill()
