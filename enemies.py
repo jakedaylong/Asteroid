@@ -2,8 +2,6 @@ import pygame
 import projectiles
 import screen_prop
 from screen_prop import screen
-import players
-from random import randint
 
 enemy_group = pygame.sprite.Group()
 BLACK = (0,0,0)
